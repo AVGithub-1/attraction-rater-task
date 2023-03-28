@@ -2,6 +2,7 @@ from psychopy import visual, monitors, core, event
 from pathlib import Path
 import random 
 import csv
+import re
 
 
 mon = monitors.Monitor('acer')
@@ -21,6 +22,8 @@ ratings = []
 
 data = []
 
+
+
 win = visual.Window(fullscr = True, monitor = mon) 
 
 #demographic window:
@@ -28,10 +31,26 @@ win = visual.Window(fullscr = True, monitor = mon)
 #sex and sexual orientation: MC 
 #textbox_1 = visual.Textbox2(win, text = '', editable = True)
 
+m_vertices = [(-0.15,1), (0.15,1), (0.15,0.5), (0.3,0.5), (0,0), (-0.3,0.5),(-0.15,0.5)]
+
+l_vertices = [(-0.65,1), (-0.35,1), (-0.35,0.5), (-0.2,0.5), (-0.5,0), (-0.8,0.5),(-0.65,0.5)]
+
+r_vertices = [(0.35,1), (0.65,1), (0.65,0.5), (0.8,0.5), (0.5,0), (0.2,0.5),(0.35,0.5)]
 
 
+def arrow_choice(stim):
+    if stim == "Blurred 1.jpg":
+        return l_vertices
+    elif stim == "Blurred 2.jpg":
+        return m_vertices
+    elif stim == "Blurred 3.jpg":
+        return r_vertices
+    elif stim == "Group.jpg":
+        return random.choice([m_vertices, r_vertices, l_vertices])
+    else:
+        return m_vertices
 
-for i in range(4): #loop to cycle through the images and have ppts rate each one
+for i in range(20): #loop to cycle through the images and have ppts rate each one
     
     folder = random.choice(stim_folder) #folder of images in stimuli
     stim_type = random.choice(stimuli) #type of image (group, blurred, or indvidual)
@@ -44,6 +63,28 @@ for i in range(4): #loop to cycle through the images and have ppts rate each one
     # simply pass the image path to ImageStim to load and display:
     image_stim = visual.ImageStim(win, image=path_to_image_file)
 
+    image_stim.draw()
+    win.flip()
+    core.wait(1)
+
+
+    # Create a blank stimulus
+    blank = visual.TextStim(win, text='')
+
+    # Display the blank stimulus
+    blank.draw()
+    win.flip()
+    core.wait(1)
+
+
+    arrow_type = arrow_choice(stim_type)
+    # Create a shape stimulus for the arrow
+    arrow = visual.ShapeStim(win, vertices=arrow_type, lineColor='white', fillColor='white')
+
+    # Display the arrow for 1 seconds
+    arrow.draw()
+    win.flip()
+    core.wait(1)
 
     ratingScale = visual.RatingScale(
         win, 
@@ -54,27 +95,44 @@ for i in range(4): #loop to cycle through the images and have ppts rate each one
         showValue = False,
         acceptText = "click to accept"
         )
-
+    
     while ratingScale.noResponse:
-        image_stim.draw()
         ratingScale.draw()
         win.flip()
+
+
     rating = ratingScale.getRating()
     decisionTime = ratingScale.getRT()
     choiceHistory = ratingScale.getHistory()
 
+    #update list of ratings and list of pictures already shown
     pics_shown.append((folder, stim_type))
     ratings.append(rating)
-    data.append([folder, stim_type, rating])
-    
+
 del pics_shown[0]
+
+
+
+def update_data(folder, stim_type, rating):
+    """
+    this function uses regular expressions and string concatenation to update the data list with
+    specificly-formatted information about each trial
+    """
+    image = stim_type - ".jpg" 
+
+    pattern = r'[0-9]'
+
+    image = re.sub(pattern, '', image)
+
+    data.append([image, stim_type, rating])
+
 
 
 #make code that saves answers to a csv file
 #make it so that a new one is made every time you run the code
 
 csv_files = list(Path("csv_files").iterdir())
-header = ["Image Folder", "Image Type", "Rating"]
+header = ["Image", "Condition", "Face", "Subject Rating"]
 
 if len(csv_files) == 0:
     with open(Path("csv_files")/'results0.csv', 'w', encoding='UTF8', newline= '') as f:
