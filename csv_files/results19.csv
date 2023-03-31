@@ -1,5 +1,5 @@
-Image Folder,Image Type,Rating
-6,Individual 1.jpg,476
-11,Group.jpg,486
-15,Individual 3.jpg,501
-3,Blurred 2.jpg,481
+Image,Condition,Face,Subject Rating
+Blurred_7,Blurred,7a,476
+Blurred_5,Blurred,5b,532
+Blurred_3,Blurred,3c,305
+Blurred_2,Blurred,2a,559
