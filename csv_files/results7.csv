@@ -1,5 +1,5 @@
-Image Folder,Image Type,Rating
-8,Blurred 1.jpg,452
-5,Blurred 3.jpg,537
-4,Blurred 1.jpg,557
-14,Group.jpg,540
+Subject #,Age,Gender,SexOr,Hispanic,Races,Image,Condition,Face,Subject Rating
+,Under 18,Male,Heterosexual(straight),Yes,,"['Group_3', 'Group', '3b', 505]","['Blurred_5', 'Blurred', '5c', 654]","['Individual_4', 'Individual', '4b', 664]","['Individual_11', 'Individual', '11a', 325]"
+,Under 18,Male,Heterosexual(straight),Yes,,"['Group_3', 'Group', '3b', 505]","['Blurred_5', 'Blurred', '5c', 654]","['Individual_4', 'Individual', '4b', 664]","['Individual_11', 'Individual', '11a', 325]"
+,Under 18,Male,Heterosexual(straight),Yes,,"['Group_3', 'Group', '3b', 505]","['Blurred_5', 'Blurred', '5c', 654]","['Individual_4', 'Individual', '4b', 664]","['Individual_11', 'Individual', '11a', 325]"
+,Under 18,Male,Heterosexual(straight),Yes,,"['Group_3', 'Group', '3b', 505]","['Blurred_5', 'Blurred', '5c', 654]","['Individual_4', 'Individual', '4b', 664]","['Individual_11', 'Individual', '11a', 325]"

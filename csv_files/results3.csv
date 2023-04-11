@@ -1,5 +1,11 @@
-Image Folder,Image Type,Rating
-13,Individual 2.jpg,610
-1,Blurred 3.jpg,245
-2,Blurred 1.jpg,379
-7,Individual 1.jpg,605
+Subject #,Age,Gender,SexOr,Hispanic,Races,Image,Condition,Face,Subject Rating
+S,u,b,j,e,c,t, ,#
+A,g,e
+G,e,n,d,e,r
+S,e,x,O,r
+H,i,s,p,a,n,i,c
+R,a,c,e,s
+Blurred_1,Blurred,1c,513
+Individual_3,Individual,3b,576
+Blurred_7,Blurred,7a,535
+Individual_5,Individual,5a,703

@@ -3,18 +3,20 @@ from pathlib import Path
 import random 
 import csv
 import re
+from demographic import questionnaire, data_demo
 
 
 mon = monitors.Monitor('acer')
 
 mon._loadAll()
 
-stim_folder = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]
+stim_folder = []
+for i in range(1,51):
+    stim_folder.append(str(i)) #this adds every number from 1 to 50 to the folder list
 
-stimuli = ["Blurred 1.jpg", "Blurred 2.jpg", "Blurred 3.jpg", "Group.jpg", 
+stimuli = ["Faceless 1.jpg", "Faceless 2.jpg", "Faceless 3.jpg", "Group.jpg", 
 "Individual 1.jpg", "Individual 2.jpg", 'Individual 3.jpg']
 
-demographics = []
 
 pics_shown = [(0,0)] #will store tuples for each image; for each, index 0 has stim folder, index 1 has stim type
 
@@ -26,10 +28,7 @@ data = [] # data will be stored in lists containing: image and corresponding fol
 
 win = visual.Window(fullscr = True, monitor = mon) 
 
-#demographic window:
-#age: textbox
-#sex and sexual orientation: MC 
-#textbox_1 = visual.Textbox2(win, text = '', editable = True)
+
 
 m_vertices = [(-0.15,1), (0.15,1), (0.15,0.5), (0.3,0.5), (0,0), (-0.3,0.5),(-0.15,0.5)]
 
@@ -39,11 +38,11 @@ r_vertices = [(0.35,1), (0.65,1), (0.65,0.5), (0.8,0.5), (0.5,0), (0.2,0.5),(0.3
 
 
 def arrow_choice(stim):
-    if stim == "Blurred 1.jpg":
+    if stim == "Faceless 1.jpg":
         return l_vertices
-    elif stim == "Blurred 2.jpg":
+    elif stim == "Faceless 2.jpg":
         return m_vertices
-    elif stim == "Blurred 3.jpg":
+    elif stim == "Faceless 3.jpg":
         return r_vertices
     elif stim == "Group.jpg":
         return random.choice([m_vertices, r_vertices, l_vertices])
@@ -71,7 +70,7 @@ def update_data(folder, stim_type, rating, arrow_type):
     #initial value for face is the folder, next the specific face will be appended
     #the specific face will be denoted, from left to right, as a, b, or c
 
-    if condition == "Blurred" or condition == 'Group':
+    if condition == "Faceless" or condition == 'Group':
         if arrow_type == l_vertices:
             face += 'a'
         elif arrow_type == m_vertices:
@@ -97,7 +96,8 @@ def new_csv(header, data, index):
         writer.writerow(header)
 
         # write multiple rows
-        writer.writerows(data)
+        for d in data:
+            writer.writerow(list(data_demo.values())+ d)
 
 
 def run_experiment(iterations):
@@ -106,14 +106,16 @@ def run_experiment(iterations):
         
         folder = random.choice(stim_folder) #folder of images in stimuli
         stim_type = random.choice(stimuli) #type of image (group, blurred, or indvidual)
-        while (folder, stim_type) in pics_shown or folder in pics_shown[i] or stim_type in pics_shown[i]:
+        arrow_type = arrow_choice(stim_type)
+        while (folder, stim_type, arrow_type) in pics_shown or folder in pics_shown[i] or stim_type in pics_shown[i]:
             folder = random.choice(stim_folder) 
             stim_type = random.choice(stimuli)
+            arrow_type = arrow_choice(stim_type)
 
         #gets the path of the specific stimuli
         #Note: the string in Path() will have to be changed to the specific directory this project is in on your
         #computer
-        path_to_image_file = Path("/Users/akhil/psychopy_project/Stimulis") / folder / stim_type
+        path_to_image_file = Path("/Users/akhil/attraction-rater-task/Stimulis") / folder / stim_type
 
         # simply pass the image path to ImageStim to load and display:
         image_stim = visual.ImageStim(win, image=path_to_image_file)
@@ -121,16 +123,6 @@ def run_experiment(iterations):
         image_stim.draw()
         win.flip()
         core.wait(1)
-
-
-        # Create a blank stimulus as a buffer between the stimuli and the arrow
-        # blank = visual.TextStim(win, text='')
-
-        # # Display the blank stimulus
-        # blank.draw()
-        # win.flip()
-        # core.wait(1)
-
 
         arrow_type = arrow_choice(stim_type)
         # Create a shape stimulus for the arrow
@@ -161,7 +153,7 @@ def run_experiment(iterations):
         choiceHistory = ratingScale.getHistory()
 
         #update list of ratings and list of pictures already shown
-        pics_shown.append((folder, stim_type))
+        pics_shown.append((folder, stim_type, arrow_type))
         ratings.append(rating)
 
         update_data(folder, stim_type, rating, arrow_type)
@@ -170,16 +162,20 @@ def run_experiment(iterations):
 
     #this part of the function makes a new csv file and puts all of the subject's data in it
     csv_files = list(Path("csv_files").iterdir())
-    header = ["Image", "Condition", "Face", "Subject Rating"]
+    header = ["Subject #", "Age", "Gender", "SexOr", "Hispanic", "Races", "Image", 
+              "Condition", "Face", "Subject Rating"]
+
 
     if len(csv_files) == 0:
         with open(Path("csv_files")/'results0.csv', 'w', encoding='UTF8', newline= '') as f:
             writer = csv.writer(f)
 
+
             writer.writerow(header)
 
             # write multiple rows
-            writer.writerows(data)
+            for d in data:
+                writer.writerow(list(data_demo.values())+ d)
 
     else:
         index = str(len(csv_files))
@@ -198,24 +194,12 @@ def run_experiment(iterations):
             index = str(len(csv_files)+1)
             new_csv(header, data, index)
 
-# make a loop, have it loop through each picture and for each picture, give a slider to rate attractiveness
-# and a next button to go to the next image
-# then ask demographic questions to the participant and store their answers in a list
-# and have a list/dictionary that stores the responses of the participants and then puts them in a file (csv maybe, ask about this)
-#things to ask:
-#   -should the images be randomized?
-#   - what file should the results be stored in?
-#   - is there anything else you want the code to do?
-
-#Should it be somewhat in ZAPS format?
-#   - would be useful, once we have the heart of the program we can add it to the frontend
-#   - maybe add in catch-all trials to check if ppts are truly paying attention
-
-#  totally randomize it; simplest thing to do is just have every trial be a random occurence
-#  write files to a csv file; record image name, face, info about person
-# you have all these variables(image name, etc.) that are written to a csv file
-
-#demographic info: age, sex, sexual orientation
-
-
 run_experiment(4)
+
+
+#Notes:
+#add subject number field in demographics page
+#add demographic info to each row in csv file instead of on top of each csv file
+#get new stimuli in stimuli folder instead of old stimuli
+#change task so that for the group photo, each person gets pointed to; maybe do this by adding a person
+#item to the pics_shown list

@@ -1,5 +1,5 @@
-Image Folder,Image Type,Rating
-11,Individual 2.jpg,483
-2,Individual 1.jpg,518
-7,Individual 3.jpg,498
-14,Group.jpg,518
+Subject #,Age,Gender,SexOr,Hispanic,Races,Image,Condition,Face,Subject Rating
+,Under 18,Male,Heterosexual(straight),Yes,,Blurred_15,Blurred,15b,483
+,Under 18,Male,Heterosexual(straight),Yes,,Group_13,Group,13c,527
+,Under 18,Male,Heterosexual(straight),Yes,,Blurred_2,Blurred,2c,525
+,Under 18,Male,Heterosexual(straight),Yes,,Group_6,Group,6c,527
