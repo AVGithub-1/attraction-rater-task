@@ -11,7 +11,7 @@ mon = monitors.Monitor('acer')
 mon._loadAll()
 
 stim_folder = []
-for i in range(1,51):
+for i in range(1,4):#51):
     stim_folder.append(str(i)) #this adds every number from 1 to 50 to the folder list
 
 stimuli = ["Faceless 1.jpg", "Faceless 2.jpg", "Faceless 3.jpg", "Group.jpg", 
@@ -107,7 +107,7 @@ def run_experiment(iterations):
         folder = random.choice(stim_folder) #folder of images in stimuli
         stim_type = random.choice(stimuli) #type of image (group, blurred, or indvidual)
         arrow_type = arrow_choice(stim_type)
-        while (folder, stim_type, arrow_type) in pics_shown or folder in pics_shown[i] or stim_type in pics_shown[i]:
+        while (folder, stim_type, arrow_type) in pics_shown: #or folder in pics_shown[i] or stim_type in pics_shown[i]:
             folder = random.choice(stim_folder) 
             stim_type = random.choice(stimuli)
             arrow_type = arrow_choice(stim_type)
@@ -124,7 +124,6 @@ def run_experiment(iterations):
         win.flip()
         core.wait(1)
 
-        arrow_type = arrow_choice(stim_type)
         # Create a shape stimulus for the arrow
         arrow = visual.ShapeStim(win, vertices=arrow_type, lineColor='white', fillColor='white')
 
@@ -179,7 +178,7 @@ def run_experiment(iterations):
 
     else:
         index = str(len(csv_files))
-        directory = Path("/Users/akhil/psychopy_project/csv_files") 
+        directory = Path("csv_files") 
 
         # Specify the filename of the CSV file
         filename = "results" + index + ".csv"
@@ -194,12 +193,8 @@ def run_experiment(iterations):
             index = str(len(csv_files)+1)
             new_csv(header, data, index)
 
-run_experiment(4)
+run_experiment(2)
 
 
-#Notes:
-#add subject number field in demographics page
-#add demographic info to each row in csv file instead of on top of each csv file
-#get new stimuli in stimuli folder instead of old stimuli
-#change task so that for the group photo, each person gets pointed to; maybe do this by adding a person
-#item to the pics_shown list
+# One thing to fix: There may be something wrong with the while loop 
+# because in results11.csv, Group_2 face 2c and Group_1 face 2b repeats
