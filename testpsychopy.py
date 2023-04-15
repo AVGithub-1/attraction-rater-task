@@ -6,6 +6,7 @@ import re
 from demographic import questionnaire, data_demo
 from introduction import intro, mon, stim_folder, stimuli, win, mouse
 from additional_functions import arrow_choice, new_csv, update_data
+from settings import *
 
 pics_shown = [(0,0)] #will store tuples for each image; for each, index 0 has stim folder, index 1 has stim type
 
@@ -14,7 +15,7 @@ ratings = []
 data = [] # data will be stored in lists containing: image and corresponding folder, condition, face, rating
 
 #for catch trial
-path_to_zendaya = Path("/Users/akhil/attraction-rater-task/Stimulis/zendaya.jpg")
+path_to_zendaya = Path(stim_folder_path) / "zendaya.jpg"
 zendaya_intro = visual.ImageStim(win, image=path_to_zendaya, size=(0.6, 0.8))
 
 #main experiment function
@@ -42,22 +43,22 @@ def run_experiment(iterations):
             #gets the path of the specific stimuli
             #Note: the string in Path() will have to be changed to the specific directory this project is in on your
             #computer
-            path_to_image_file = Path("/Users/akhil/attraction-rater-task/Stimulis") / folder / stim_type
+            path_to_image_file = Path(stim_folder_path) / folder / stim_type
 
             # simply pass the image path to ImageStim to load and display:
             image_stim = visual.ImageStim(win, image=path_to_image_file)
 
         image_stim.draw()
         win.flip()
-        core.wait(1)
+        core.wait(image_display_time)
 
         # Create a shape stimulus for the arrow
-        arrow = visual.ShapeStim(win,color=[-1,-1,-1], vertices=arrow_type, lineColor='white', fillColor='white')
+        arrow = visual.ShapeStim(win, vertices=arrow_type, lineColor='black', fillColor='black')
 
         # Display the arrow for 1 seconds
         arrow.draw()
         win.flip()
-        core.wait(1)
+        core.wait(arrow_display_time)
 
         ratingScale = visual.RatingScale(
             win, 
@@ -122,6 +123,6 @@ def run_experiment(iterations):
         else:
             new_csv(header, data, index, data_demo)
 
-run_experiment(3)
+run_experiment(trials)
 
 

@@ -1,7 +1,9 @@
 from additional_functions import arrow_choice, l_vertices, m_vertices, r_vertices
+from settings import *
 from psychopy import visual, monitors, core, event
 from pathlib import Path
 import random 
+
 
 
 mon = monitors.Monitor('acer')
@@ -9,7 +11,7 @@ mon = monitors.Monitor('acer')
 mon._loadAll()
 
 stim_folder = []
-for i in range(1,51):
+for i in range(stim_folder_start,stim_folder_end+1):
     stim_folder.append(str(i)) #this adds every number from 1 to 50 to the folder list
 
 stimuli = ["Faceless 1.jpg", "Faceless 2.jpg", "Faceless 3.jpg", "Group.jpg", 
@@ -34,14 +36,14 @@ def intro():
     cont_button = visual.TextBox2(win,color=(-1,-1,-1), text = 'continue', fillColor='grey',
                                pos = (0,-.8), size = [0.15,0.15], alignment='center')
     
-    path_to_image_file_1 = Path("/Users/akhil/attraction-rater-task/Stimulis/1/Group.jpg")
-    path_to_image_file_2 = Path("/Users/akhil/attraction-rater-task/Stimulis/3/Faceless 1.jpg")
+    path_to_image_file_1 = Path(stim_folder_path)/"1"/"Group.jpg"
+    path_to_image_file_2 = Path(stim_folder_path)/"3"/"Faceless 1.jpg"
 
     practice1 = visual.TextBox2(win,color=[-1,-1,-1], pos=(0,0.5), text = 'The experiment will consist of several trials. In each trial, a photo with people\'s faces, will be shown for 1 s. Like this:')
     example_image = visual.ImageStim(win, image=path_to_image_file_1, size=(0.6, 0.8))
 
     practice2 = visual.TextBox2(win,color=[-1,-1,-1], pos=(0,0.5), text = 'After that, an arrow will appear for 1 s above the face that needs to be rated on. Like this:')
-    example_arrow = visual.ShapeStim(win,color=[-1,-1,-1], vertices=m_vertices, lineColor='white', fillColor='white', pos=(0,-0.6))
+    example_arrow = visual.ShapeStim(win, vertices=m_vertices, lineColor='black', fillColor='black', pos=(0,-0.6))
 
     practice3 = visual.TextBox2(win,color=[-1,-1,-1], pos=(0,0.5), text = 'You will then need to rate the attractiveness of the face the arrow pointed to. You will form the rating by moving a mouse to set a marker on a continuous scale from unattractive to attractive.')
     example_rater = ratingScale = visual.RatingScale(
@@ -59,7 +61,7 @@ def intro():
     practice4 = visual.TextBox2(win,color=[-1,-1,-1], alignment = 'center', text = 'Let\'s do a couple of trials to try!')
 
     catch_trial_text = visual.TextBox2(win,color=[-1,-1,-1], pos=(0,0.5), text = 'During the study, one of the trials will show a photo of Zendaya (shown below), when you see the photo here, please move the marker to the right of the scale.')
-    path_to_zendaya = Path("/Users/akhil/attraction-rater-task/Stimulis/zendaya.jpg")
+    path_to_zendaya = Path(stim_folder_path) / "zendaya.jpg"
     zendaya_intro = visual.ImageStim(win, image=path_to_zendaya, size=(0.6, 0.8))
 
 
@@ -114,13 +116,13 @@ def intro():
 
         image_stim.draw()
         win.flip()
-        core.wait(1)
+        core.wait(image_display_time)
 
-        arrow = visual.ShapeStim(win,color=[-1,-1,-1], vertices=j, lineColor='white', fillColor='white')
+        arrow = visual.ShapeStim(win,color=[-1,-1,-1], vertices=j, lineColor='black', fillColor='black')
 
         arrow.draw()
         win.flip()
-        core.wait(1)
+        core.wait(arrow_display_time)
 
         ratingScale = visual.RatingScale(
             win, 
