@@ -10,6 +10,7 @@ mon = monitors.Monitor('acer')
 
 mon._loadAll()
 
+
 stim_folder = []
 for i in range(stim_folder_start,stim_folder_end+1):
     stim_folder.append(str(i)) #this adds every number from 1 to 50 to the folder list
@@ -62,7 +63,7 @@ def intro():
 
     catch_trial_text = visual.TextBox2(win,color=[-1,-1,-1], pos=(0,0.5), text = 'During the study, one of the trials will show a photo of Zendaya (shown below), when you see the photo here, please move the marker to the right of the scale.')
     path_to_zendaya = Path(stim_folder_path) / "zendaya.jpg"
-    zendaya_intro = visual.ImageStim(win, image=path_to_zendaya, size=(0.6, 0.8))
+    zendaya_intro = visual.ImageStim(win, image=path_to_zendaya, size= (0.8/aspect_ratio , 0.8), pos = (0,-0.2))
 
 
     while mouse.isPressedIn(cont_button) == False:

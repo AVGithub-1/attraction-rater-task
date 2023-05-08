@@ -16,14 +16,19 @@ data = [] # data will be stored in lists containing: image and corresponding fol
 
 #for catch trial
 path_to_zendaya = Path(stim_folder_path) / "zendaya.jpg"
-zendaya_intro = visual.ImageStim(win, image=path_to_zendaya, size=(0.6, 0.8))
+zendaya_intro = visual.ImageStim(win, image=path_to_zendaya)
 
 #main experiment function
 def run_experiment(iterations):
 
-    intro()
+    if show_intro == True:
+        intro()
 
     for i in range(iterations): #loop to cycle through the images and have ppts rate each one
+        key = event.getKeys()
+        if 'escape' in key:
+            core.quit()
+            return None
 
         if i == int(iterations/2):
             folder = "None"
@@ -123,6 +128,8 @@ def run_experiment(iterations):
         else:
             new_csv(header, data, index, data_demo)
 
+
 run_experiment(trials)
+
 
 

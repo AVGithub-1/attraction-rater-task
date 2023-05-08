@@ -10,4 +10,8 @@ image_display_time = 1
 
 arrow_display_time = 1  #note: it seems to show for a little longer than it's actual display time, not sure why
 
-trials = 2
+aspect_ratio = 1366/768   #note: input this as width divided by height
+
+trials = 5
+
+show_intro = True
